@@ -14,7 +14,8 @@ class EmployeesController extends Controller
      */
     public function index()
     {
-        //
+        $employees = Employees::all();
+        return view('employees.index', compact('employees'));
     }
 
     /**
@@ -24,7 +25,7 @@ class EmployeesController extends Controller
      */
     public function create()
     {
-        //
+        return view('employees.create');
     }
 
     /**
@@ -69,7 +70,33 @@ class EmployeesController extends Controller
      */
     public function update(Request $request, Employees $employees)
     {
-        //
+        $request->validate([
+            'email' => 'required|email|unique:employees,email, $employees->id',
+            'fullname' => 'required|string|max:255',
+            'doj' => 'required',
+            'dol' => 'sometimes|nullable',
+        ]);
+
+        $employees->email = $request->email;
+        $employees->fullname = $request->fullname;
+        $employees->doj = $request->doj;
+        $employees->dol = $request->dol;
+
+        if($request->hasFile('image'))
+        {
+            $image = $request->image;
+            $image_new_name = time() . '.' . $image->getClientOriginalExtension();
+            $image->move('storage/employees', $image_new_name);
+            $user->image = '/storage/employees/' . $image_new_name;
+        }
+
+        $employees->save();
+
+        Session::flash('success', 'Employee updated successfully!');
+
+        return redirect()->back();
+
+
     }
 
     /**
