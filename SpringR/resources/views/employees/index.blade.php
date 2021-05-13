@@ -29,7 +29,7 @@
             <th scope="row"><img src="@if($employee->image){{ asset($employee->image) }} @else {{ asset('website/images/user.png') }} @endif"></th>
             <td>{{ $employee->fullname }}</td>
             <td>{{ $employee->email }}</td>
-            <td>{{ $employee->doj->format('M d, Y') }}</td>
+            <td>{{ $employee->doj }}</td>
             <td>
 
                 <div class="dropdown"> {{-- Dropdown --}}

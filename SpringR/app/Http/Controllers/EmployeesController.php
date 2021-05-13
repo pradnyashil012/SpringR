@@ -87,7 +87,7 @@ class EmployeesController extends Controller
      */
     public function edit(Employees $employees)
     {
-        return view('products.edit');
+        return view('employees.edit');
     }
 
     /**
