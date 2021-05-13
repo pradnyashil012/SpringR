@@ -29,7 +29,21 @@
             <th scope="row"><img src="@if($employee->image){{ asset($employee->image) }} @else {{ asset('website/images/user.png') }} @endif"></th>
             <td>{{ $employee->fullname }}</td>
             <td>{{ $employee->email }}</td>
-            <td>{{ $employee->doj }}</td>
+            <td>
+            <?php
+            $fdate = strtotime($employee->doj);
+            $edate = strtotime($employee->dol);
+            
+            $diff = abs($edate - $fdate);
+
+            $years = floor($diff / (365*60*60*24)); 
+            $months = floor(($diff - $years * 365*60*60*24)
+                               / (30*60*60*24)); 
+            
+            printf("%d years, %d months", $years, $months);
+
+            ?>
+            </td>
             <td>
 
                 <div class="dropdown"> {{-- Dropdown --}}

@@ -38,13 +38,17 @@ class EmployeesController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
+
         $request->validate([
-            'email' => 'required|email|unique:employees,email, $employees->id',
+            'email' => 'required|email|unique:employees,email, $employee->id',
             'fullname' => 'required|string|max:255',
             'doj' => 'required',
             'dol' => 'sometimes|nullable',
             'image' => 'required|image',
         ]);
+
+        
 
         $employee = Employees::create([
             'email' => $request->email,
@@ -71,10 +75,10 @@ class EmployeesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Employees  $employees
+     * @param  \App\Models\Employees  $Employee
      * @return \Illuminate\Http\Response
      */
-    public function show(Employees $employees)
+    public function show(Employees $employee)
     {
         //
     }
@@ -82,48 +86,49 @@ class EmployeesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Employees  $employees
+     * @param  \App\Models\Employees  $Employee
      * @return \Illuminate\Http\Response
      */
-    public function edit(Employees $employees)
+    public function edit(Employees $employee)
     {
-        return view('employees.edit');
+       
+        return view('employees.edit', compact('employee'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Employees  $employees
+     * @param  \App\Models\Employees  $Employee
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Employees $employees)
+    public function update(Request $request, Employees $employee)
     {
         $request->validate([
-            'email' => 'required|email|unique:employees,email, $employees->id',
+            'email' => 'required|email',
             'fullname' => 'required|string|max:255',
             'doj' => 'required',
             'dol' => 'sometimes|nullable',
         ]);
 
-        $employees->email = $request->email;
-        $employees->fullname = $request->fullname;
-        $employees->doj = $request->doj;
-        $employees->dol = $request->dol;
+        $employee->email = $request->email;
+        $employee->fullname = $request->fullname;
+        $employee->doj = $request->doj;
+        $employee->dol = $request->dol;
 
         if($request->hasFile('image'))
         {
             $image = $request->image;
             $image_new_name = time() . '.' . $image->getClientOriginalExtension();
             $image->move('storage/employees', $image_new_name);
-            $employees->image = '/storage/employees/' . $image_new_name;
+            $Employee->image = '/storage/employees/' . $image_new_name;
         }
 
-        $employees->save();
+        $employee->save();
 
         Session::flash('success', 'Employee updated successfully!');
 
-        return redirect()->back();
+        return redirect()->route('employees.index');
 
 
     }
@@ -131,12 +136,12 @@ class EmployeesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Employees  $employees
+     * @param  \App\Models\Employees  $Employee
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Employees $employees)
+    public function destroy(Employees $employee)
     {
-        $employees->delete();
+        $employee->delete();
         return back();
     }
 }
