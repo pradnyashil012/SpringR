@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1>Products Update</h1>
+<h1>Employee Update</h1>
 <hr/>
 
 @if ($errors->any())
@@ -15,16 +15,20 @@
 </div>
 @endif
 
-<form action="{{ route('products.update', $product->id) }}" method="post">
+<form action="{{ route('employees.update', $employee->id) }}" method="post">
     @csrf
     @method('put')
-    <input type="text" name="name" class="form-control mb-3" placeholder="Product Name" value="{{ $product->name }}"/>
+    <input type="text" name="email" class="form-control mb-3" value="{{ $employee->email }}"/>
+
+    <input type="text" name="fullname" class="form-control mb-3" value="{{ $employee->fullname }}"/>
     
-    <input type="number" name="price" class="form-control mb-3" placeholder="Price $$" value="{{ $product->price }}"/>
+    <input type="date" name="doj" class="form-control mb-3" value="{{ $employee->doj }}"/>
+
+    <input type="date" name="dol" class="form-control mb-3" value="{{ $employee->dol }}"/>
+
+    <input type="file" name="image" class="form-control mb-3">
     
-    <textarea class="form-control mb-3" name="description" rows="4" placeholder="Description">{{ $product->description }}</textarea>
-    
-    <button class="btn btn-primary float-end px-5" type="submit">Submit</button>
+    <button class="btn btn-primary float-end px-5" type="submit">Update</button>
 </form>
 
 @endsection

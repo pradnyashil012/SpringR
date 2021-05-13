@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1>Products Create</h1>
+<h1>Employees Records</h1>
 <hr/>
 
 @if ($errors->any())
@@ -15,15 +15,23 @@
 </div>
 @endif
 
-<form action="{{ route('products.store') }}" method="post">
+<form action="{{ route('employees.store') }}" method="post">
+    
     @csrf
-    <input type="text" name="name" class="form-control mb-3" placeholder="Product Name"/>
     
-    <input type="number" name="price" class="form-control mb-3" placeholder="Price $$"/>
+    <input type="text" name="email" class="form-control mb-3" placeholder="Email"/>
+
+    <input type="text" name="fullname" class="form-control mb-3" placeholder="Full Name"/>
     
-    <textarea class="form-control mb-3" name="description" rows="4" placeholder="Description"></textarea>
-    
-    <button class="btn btn-primary float-end px-5" type="submit">Submit</button>
+    <input type="date" name="doj" class="form-control mb-3" placeholder="Date of Joining"/>
+
+    <input type="date" name="dol" class="form-control mb-3" placeholder="Date of Leaving"/>
+
+    <input type="checkbox" class="form-control mb-3"> Still Working
+
+    <input type="file" name="image" class="form-control mb-3">
+     
+    <button class="btn btn-primary float-end px-5" type="submit">Save</button>
 </form>
 
 @endsection
