@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Employees;
 use Illuminate\Http\Request;
+use Session;
+use Carbon\Carbon;
 
 class EmployeesController extends Controller
 {
@@ -36,7 +38,34 @@ class EmployeesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'email' => 'required|email|unique:employees,email, $employees->id',
+            'fullname' => 'required|string|max:255',
+            'doj' => 'required',
+            'dol' => 'sometimes|nullable',
+            'image' => 'required|image',
+        ]);
+
+        $employee = Employees::create([
+            'email' => $request->email,
+            'fullname' => $request->fullname,
+            'doj' => $request->doj,
+            'dol' => $request->dol,
+            'image' => 'image.jpg',
+        ]);
+
+        if($request->has('image'))
+        {
+            $image = $request->image;
+            $image_new_name = time() . '.' . $image->getClientOriginalExtension();
+            $image->move('storage/employees', $image_new_name);
+            $employee->image = '/storage/employees/' . $image_new_name;
+        }
+
+        $employee->save();
+
+        Session::flash('success', 'Employee created successfully!');
+        return redirect()->route('employees.index');
     }
 
     /**
@@ -58,7 +87,7 @@ class EmployeesController extends Controller
      */
     public function edit(Employees $employees)
     {
-        //
+        return view('products.edit');
     }
 
     /**
@@ -87,7 +116,7 @@ class EmployeesController extends Controller
             $image = $request->image;
             $image_new_name = time() . '.' . $image->getClientOriginalExtension();
             $image->move('storage/employees', $image_new_name);
-            $user->image = '/storage/employees/' . $image_new_name;
+            $employees->image = '/storage/employees/' . $image_new_name;
         }
 
         $employees->save();
@@ -107,6 +136,7 @@ class EmployeesController extends Controller
      */
     public function destroy(Employees $employees)
     {
-        //
+        $employees->delete();
+        return back();
     }
 }
